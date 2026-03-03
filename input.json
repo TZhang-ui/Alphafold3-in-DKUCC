@@ -1,0 +1,14 @@
+{
+    "name": "protein_name",
+    "modelSeeds": [1],
+    "dialect": "alphafold3",
+    "version": 1,
+    "sequences": [
+        {
+            "protein": {
+                "id": "A",
+                "sequence": "protein_seq"
+            }
+        }
+    ]
+}
