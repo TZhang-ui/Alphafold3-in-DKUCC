@@ -1,52 +1,115 @@
-###login
+#!/bin/bash
+
+###############################################################################
+# AlphaFold3 Manual Workflow on DKUCC
+#
+# This script documents the standard procedure for running AlphaFold3 (AF3)
+# on the DKUCC cluster.
+#
+# Execute commands step-by-step as needed.
+###############################################################################
+
+
+############################
+# 1. Login to DKUCC
+############################
+
+# Run this command from your local terminal:
 ssh your_netid@dkucc-login-01.rc.duke.edu
-#then you need to enter your password
 
-  eg.
-   ssh tz141@dkucc-login-01.rc.duke.edu
+# Example:
+# ssh tz141@dkucc-login-01.rc.duke.edu
 
-###enter target folder
+
+############################
+# 2. Enter Your Working Directory
+############################
 
 cd /work/your_netid
-  eg.
-   cd /work/tz141
 
-#there should be two folders(AF3_Input and AF3_Output, if no, please create) and one script(run_AF3.sh,the script for running AF3)
+# Example:
+# cd /work/tz141
 
-### upload input files
+# Your directory should contain:
+#   AF3_Input/
+#   AF3_Output/
+#   run_AF3.sh
+#
+# If not, create them:
+
+mkdir -p AF3_Input AF3_Output
+
+
+############################
+# 3. Upload Input JSON Files
+############################
+
 cd AF3_Input
-sftp user@ip (the server than contains your input files,远程登录后需要cd到储存输入文件的文件夹，但是注意这一步建议一个文件夹一个文件夹来，不能一步直接cd到目标文件夹，可能会出现连接问题)
 
-get *json （upload all jsons files to AF3_Input)
-exit(back to dkucc)
+# Connect to the remote server containing your JSON files:
+sftp user@remote_ip
+get *.json (upload all json files)
+exit (return to DKUCC)
 
-  
-  eg.
-   cd AF3_Input
-   sftp test@10.200.20.112
-     cd /u02
-     cd tianyue
-     cd AF3
-     cd iput_files
-     get *json
-     exit
+# IMPORTANT:
+# After connecting via sftp, navigate step-by-step into the directory
+# containing your JSON files.
+# Avoid jumping directly to deep directories in a single command,
+# as this may cause connection issues.
+
+# Example SFTP session:
+#
+# sftp test@10.200.20.112
+#   cd /u02
+#   cd tianyue
+#   cd AF3
+#   cd input_files
+#   get *.json (upload all json files)
+#   exit
+#
+
+# After exiting SFTP, you will return to DKUCC.
 
 
+############################
+# 4. Submit AF3 Job
+############################
 
-###run AF3
-*still under AF3_Input
+# Make sure you are still inside:
+# /work/your_netid/AF3_Input
 
 sbatch /work/your_netid/run_AF3.sh
 
 
-###查看运行状态
+############################
+# 5. Monitor Job Status
+############################
 
-*可以查看当前运行的所有项目及已运行时间
+# View running jobs and elapsed runtime:
 squeue
 
 
-###查看结果
-cd AF3_Output
-*AF3的output folder以input json file当中的name为名字，共包含6个文件和5个文件夹，ptm和iptm结果在name_summary_confidences.json, 结构文件在name__model.cif
+############################
+# 6. View Output Files
+############################
 
+cd ../AF3_Output
 
+# For each input JSON file:
+#   - An output folder will be created.
+#   - The folder name matches the "name" field in the input JSON.
+#   - Each folder contains:
+#       6 files
+#       5 subdirectories
+#
+# Key output files:
+#
+#   pTM and/or ipTM scores:
+#       name_summary_confidences.json
+#
+#   Predicted structure:
+#       name_model.cif
+#
+###############################################################################
+# End of workflow
+###############################################################################
