@@ -80,6 +80,38 @@ exit (return to DKUCC)
 
 sbatch /work/your_netid/run_AF3.sh
 
+# ---------------------------------------------------------------------------
+# GPU Configuration (If you need to change GPU type or GPU number)
+# ---------------------------------------------------------------------------
+#
+# Before submitting the job, you may modify the SLURM settings inside:
+#
+#     /work/your_netid/run_AF3.sh
+#
+# Locate the following line:
+#
+#     #SBATCH -p l20-gpu --gres=gpu:4
+#
+# You can modify:
+#
+#   1) GPU partition (-p)
+#      Available GPU partitions:
+#         l20-gpu
+#         h20-gpu
+#
+#   2) Number of GPUs (--gres=gpu:X)
+#      Change "4" to the desired number.
+#
+# Example: Request 2 H20 GPUs
+#
+#     #SBATCH -p h20-gpu --gres=gpu:2
+#
+# After modifying run_AF3.sh, resubmit the job:
+#
+#     sbatch /work/your_netid/run_AF3.sh
+#
+# ---------------------------------------------------------------------------
+
 
 ############################
 # 5. Monitor Job Status
